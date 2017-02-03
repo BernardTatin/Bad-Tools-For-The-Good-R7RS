@@ -1,0 +1,59 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+*.core
+
+# scheme
+*.sld
+compiled/
+*.import.scm
+appinone-*.scm
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# logs
+*.log
+tfile
+tmp/
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+core
+
+*-m32
+*-m64
+objs*/
+
+# Debug files
+*.dSYM/
+
+# ide files
+nbproject/
+.project
+.cproject
+.*.swp
+*~
+*.bak
+.idea/
+*.komodo*
