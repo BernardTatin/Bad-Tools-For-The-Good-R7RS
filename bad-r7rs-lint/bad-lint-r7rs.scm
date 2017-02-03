@@ -22,12 +22,10 @@
   (chicken
 	(define current-compiler 'chicken)
 	(import (scheme base) (scheme write) (scheme read) (scheme file) (scheme process-context) (matchable) (extras)))
-  (gosh
-	(define current-compiler 'gosh))
   (else
 	(define current-compiler 'unknown)
 	(import (scheme base) (scheme write) (scheme read) 
 			(scheme process-context) 
 			)))
 
-(include "./universal-inc.scm")
+(include "./lint-body.scm")

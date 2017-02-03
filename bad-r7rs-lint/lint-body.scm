@@ -2,21 +2,7 @@
 ;; universal-inc.scm
 ;; ======================================================================
 
-
-(define (println . args)
-  (for-each display args))
-
-(define read-file
-  (lambda(file-name)
-	(let ((handle (open-input-file file-name)))
-	  (letrec ((rloop (lambda(acc)
-						(let ((expression (read handle)))
-						  (if (eof-object? expression)
-							(reverse acc)
-							(rloop (cons expression acc)))))))
-		(let ((r (rloop '())))
-		  (close-input-port handle)
-		  r)))))
+(include "./tools.scm")
 
 (define on-library
   (lambda(library-name rest)
@@ -46,6 +32,27 @@
 	(lint-r7rs (cdr body))
 	(lint-r7rs rest)))
 
+(define on-cond-expand
+  (lambda (conditionnals rest)
+	(letrec ((loop (lambda(c)
+					 (match c
+							('()
+							 (lint-r7rs rest))
+							((('else more ...))
+							 (lint-r7rs more)
+							 (lint-r7rs rest))
+							(((compiler-name more ...) others ...)
+							 (cond
+							   ((eq? compiler-name current-compiler)
+								(lint-r7rs more)
+								(lint-r7rs rest))
+							   (else 
+								 (loop others))))
+							(else 
+							  (loop (cdr c)))))))
+	  (loop conditionnals))
+	))
+
 (define lint-r7rs
   (lambda(code)
 	(cond
@@ -57,57 +64,9 @@
 			  ((('import symbols ...) rest ...) (on-import symbols rest))
 			  ((('define body ...) rest ...) (on-define body rest))
 			  ((('define-syntax body ...) rest ...) (on-define-syntax body rest))
-			  ((('cond-expand conditionnals ...) rest ...)
-			   (letrec ((loop (lambda(c)
-								(match c
-									   ('()
-										(lint-r7rs rest))
-									   #|
-									   ((('chicken more ...) others ...)
-										(cond-expand
-										  (chicken 
-											(lint-r7rs more)
-											(lint-r7rs rest))
-										  (else (loop others))
-										  ))
-									   ((('guile more ...) others ...)
-										(cond-expand
-										  (guile 
-											(lint-r7rs more)
-											(lint-r7rs rest))
-										  (else (loop others))
-										  ))
-									   ((('sagittarius more ...) others ...)
-										(cond-expand
-										  (sagittarius 
-											(lint-r7rs more)
-											(lint-r7rs rest))
-										  (else (loop others))
-										  ))
-									   |#
-									   ((('else more ...))
-										(println "------- 'else \n")
-										(lint-r7rs more)
-										(lint-r7rs rest))
-									   (((compiler-name more ...) others ...)
-										(println "------- 1 compiler " compiler-name " current compiler "  current-compiler "\n")
-										(cond
-										  ((eq? compiler-name current-compiler)
-										   (println "------- 2 compiler " compiler-name " found\n")
-										   (lint-r7rs more)
-										   (lint-r7rs rest))
-										  (else 
-										   (println "------- 3 compiler " compiler-name " NOT found\n")
-											(loop others))))
-									   (else 
-										(println "------- compiler NO match \n")
-										 (loop (cdr c)))))))
-				 (loop conditionnals)))
-			  ((head)
-			   (lint-r7rs head))
-			  ((head rest ...)
-			   (lint-r7rs head)
-			   (lint-r7rs rest))))
+			  ((('cond-expand conditionnals ...) rest ...) (on-cond-expand conditionnals rest))
+			  ((head) (lint-r7rs head))
+			  ((head rest ...) (lint-r7rs head) (lint-r7rs rest))))
 	  (else #t))))
 
 
