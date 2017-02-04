@@ -7,13 +7,11 @@
 
 (define read-file
   (lambda(file-name)
-	(let ((handle (open-input-file file-name)))
-	  (letrec ((rloop (lambda(acc)
-						(let ((expression (read handle)))
-						  (if (eof-object? expression)
-							(reverse acc)
-							(rloop (cons expression acc)))))))
-		(let ((r (rloop '())))
-		  (close-input-port handle)
-		  r)))))
-
+	(with-input-from-file file-name
+						  (lambda()
+							(letrec ((rloop (lambda(acc)
+											  (let ((expression (read)))
+												(if (eof-object? expression)
+												  (reverse acc)
+												  (rloop (cons expression acc)))))))
+							  (rloop '()))))))
