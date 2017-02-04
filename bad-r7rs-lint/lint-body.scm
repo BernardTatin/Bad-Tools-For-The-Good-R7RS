@@ -23,13 +23,15 @@
 (define on-define
   (lambda(body rest)
 	(println "  define : " (car body) "\n")
-	(lint-r7rs (cdr body))
+	;; only for deep investgations
+	;; (lint-r7rs (cdr body))
 	(lint-r7rs rest)))
 
 (define on-define-syntax
   (lambda(body rest)
 	(println "  define-syntax : " (car body) "\n")
-	(lint-r7rs (cdr body))
+	;; only for deep investgations
+	;; (lint-r7rs (cdr body))
 	(lint-r7rs rest)))
 
 (define on-cond-expand
