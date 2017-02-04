@@ -2,6 +2,13 @@
 
 sources=~/git/ChickenAndShout/hexdump/hexdump.scm
 
+domit () {
+	echo '=================================================='
+	echo '*                 MIT-SCHEME                     *'
+	echo '=================================================='
+	mit-scheme --quiet --eval "(load \"mit-bad-lint-r7rs.scm\") (themain '(mit-bad-lint-r7rs ${sources}))"
+}
+
 dofoment () {
 	echo '=================================================='
 	echo '*                 FOMENT                         *'
@@ -41,7 +48,7 @@ dohelp () {
 	local script=$(basename $0)
 	cat << DOHELP
 ==================================================
-*                 HELP                         
+*                 HELP                           *
 ==================================================
 
 ${script} gosh|sagittarius|guile|chicken|all : 
@@ -54,7 +61,7 @@ option=all
 [ $# -ne 0 ] && option=$1
 
 case ${option} in
-	gosh|sagittarius|guile|chicken|foment)
+	gosh|sagittarius|guile|chicken|foment|mit)
 		do${option}
 		;;
 	all)

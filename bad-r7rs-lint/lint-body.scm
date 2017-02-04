@@ -1,37 +1,45 @@
 ;; ======================================================================
-;; universal-inc.scm
+;; lint-body.scm
 ;; ======================================================================
 
-(include "./tools.scm")
+(display "Loading tools...\n")
+(include "tools.scm")
+(display "Tools loaded\n")
 
+(display "define on-library\n")
 (define on-library
   (lambda(library-name rest)
 	(println "Library: " library-name "\n")
 	(lint-r7rs rest)))
 
+(display "define on-export\n")
 (define on-export
   (lambda(exported-symbols rest)
 	(println "Exported symbols : " exported-symbols "\n")
 	(lint-r7rs rest)))
 
+(define on-import\n)
 (define on-import
   (lambda(imported-libs rest)
 	(println "Imported libs :\n")
 	(for-each (lambda(s) (println "   " s "\n")) imported-libs)
 	(lint-r7rs rest)))
 
+(display "on-define\n")
 (define on-define
   (lambda(body rest)
 	(println "  define : " (car body) "\n")
 	(lint-r7rs (cdr body))
 	(lint-r7rs rest)))
 
+(display "on-define-syntax\n")
 (define on-define-syntax
   (lambda(body rest)
 	(println "  define-syntax : " (car body) "\n")
 	(lint-r7rs (cdr body))
 	(lint-r7rs rest)))
 
+(display "on-cond-expand\n")
 (define on-cond-expand
   (lambda (conditionnals rest)
 	(letrec ((loop (lambda(c)
@@ -53,6 +61,7 @@
 	  (loop conditionnals))
 	))
 
+(display "lint-r7rs\n")
 (define lint-r7rs
   (lambda(code)
 	(cond
@@ -70,12 +79,14 @@
 	  (else #t))))
 
 
+(display "dohelp\n")
 (define dohelp
   (lambda(exe-name exit-code)
 	(println exe-name " [-h|--help] : this text\n")
 	(println exe-name " file [file ...] : lint all the files\n")
 	(exit exit-code)))
 
+(display "on-file\n")
 (define on-file
   (lambda (file-name)
 	(println "----------------------------------------------------------------------\n")
@@ -83,8 +94,12 @@
 	(let ((p (read-file file-name)))
 	  (for-each lint-r7rs p))))
 
+(display "themain\n")
 (define themain
   (lambda (args)
+	(println "Compiler " current-compiler " Args " args)
+	(when (null? args)
+	  (dohelp "bad-lint" 0))
 	(let ((exe-name (car args))
 		  (_args (cdr args)))
 	  (match _args
@@ -97,4 +112,7 @@
 			   (for-each on-file _args)
 			   (exit 0))))))
 
-(themain (command-line))
+(if (not (eq? current-compiler 'mit))
+  (begin
+	(println "running themain for ")
+	(themain (command-line))))
