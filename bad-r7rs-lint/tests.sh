@@ -6,7 +6,7 @@ domit () {
 	echo '=================================================='
 	echo '*                 MIT-SCHEME                     *'
 	echo '=================================================='
-	mit-scheme --quiet --eval "(load \"mit-bad-lint-r7rs.scm\") (themain '(mit-bad-lint-r7rs ${sources}))"
+	mit-scheme --quiet --load mit-bad-lint-r7rs.scm
 }
 
 dofoment () {
@@ -51,7 +51,7 @@ dohelp () {
 *                 HELP                           *
 ==================================================
 
-${script} gosh|sagittarius|guile|chicken|all : 
+${script} gosh|sagittarius|guile|chicken|foment|mit|all : 
 ${script} : same as ${script} all
 DOHELP
 	exit 0

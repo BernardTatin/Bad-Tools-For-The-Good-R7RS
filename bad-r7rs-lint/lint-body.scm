@@ -87,6 +87,7 @@
 
 (define themain
   (lambda (args)
+	(println "running themain for ")
 	(println "Compiler " current-compiler " Args " args)
 	(when (null? args)
 	  (dohelp "bad-lint" 0))
@@ -104,5 +105,5 @@
 
 (if (not (eq? current-compiler 'mit))
   (begin
-	(println "running themain for ")
-	(themain (command-line))))
+	(themain (command-line)))
+  (println "With Mit Scheme\n"))

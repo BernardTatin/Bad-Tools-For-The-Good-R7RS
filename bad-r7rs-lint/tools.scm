@@ -7,6 +7,7 @@
 
 (define read-file
   (lambda(file-name)
+	(println "read file <" file-name ">\n")
 	(with-input-from-file file-name
 						  (lambda()
 							(letrec ((rloop (lambda(acc)
