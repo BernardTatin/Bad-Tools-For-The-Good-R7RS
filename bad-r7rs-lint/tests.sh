@@ -30,7 +30,7 @@ doguile () {
 	guile --fresh-auto-compile -s bad-lint-r7rs.scm ${sources}
 }
 
-dosagittarus () {
+dosagittarius () {
 	echo '=================================================='
 	echo '*                 SAGITTARIUS                    *'
 	echo '=================================================='
@@ -65,7 +65,7 @@ case ${option} in
 		do${option}
 		;;
 	all)
-		for c in gosh sagittarius guile chicken
+		for c in gosh sagittarius guile chicken foment mit
 		do
 			do${c}
 		done

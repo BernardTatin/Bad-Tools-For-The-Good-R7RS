@@ -80,28 +80,40 @@
 
 (define on-file
   (lambda (file-name)
-	(println "----------------------------------------------------------------------\n")
-	(println file-name "\n\n")
-	(let ((p (read-file file-name)))
-	  (for-each lint-r7rs p))))
+	(let ((doit (lambda()
+				  (let ((p (read-file file-name)))
+					(for-each lint-r7rs p)))))
+	  (println "----------------------------------------------------------------------\n")
+	  (println file-name "\n\n")
+	  (cond 
+		((eq? current-compiler 'guile)	
+		 (catch 'open-fail
+				(doit)
+				(lambda (key)
+				  (println "Cannot load '" file-name "' (" key ")"))))
+		(else (doit))
+		))))
 
 (define themain
   (lambda (args)
 	(println "running themain for ")
-	(println "Compiler " current-compiler " Args " args)
+	(println "Compiler " current-compiler " Args " args "\n")
 	(when (null? args)
 	  (dohelp "bad-lint" 0))
 	(let ((exe-name (car args))
-		  (_args (cdr args)))
-	  (match _args
+		  (real_args (cdr args)))
+	  (println "exe " exe-name " real_args " real_args "\n\n\n")
+	  
+	  (match real_args
 			 (() (dohelp exe-name 0))
 			 (("-h") (dohelp exe-name 0))
 			 (("-h" _ ...) (dohelp exe-name 0))
 			 (("--help") (dohelp exe-name 0))
 			 (("--help" _ ...) (dohelp exe-name 0))
 			 (else 
-			   (for-each on-file _args)
+			   (for-each on-file real_args)
 			   (exit 0))))))
+
 
 (if (not (eq? current-compiler 'mit))
   (begin
