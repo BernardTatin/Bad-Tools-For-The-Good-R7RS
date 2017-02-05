@@ -1,3 +1,4 @@
+#lang racket
 ;; ======================================================================
 ;; bad-r7rs.scm
 ;; Read r7rs sources files and interpret them
