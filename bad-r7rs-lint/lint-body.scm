@@ -37,21 +37,39 @@
 (define on-cond-expand
   (lambda (conditionnals rest)
 	(letrec ((loop (lambda(c)
-					 (match c
-							('()
-							 (lint-r7rs rest))
-							((('else more ...))
-							 (lint-r7rs more)
-							 (lint-r7rs rest))
-							(((compiler-name more ...) others ...)
-							 (cond
-							   ((eq? compiler-name current-compiler)
-								(lint-r7rs more)
-								(lint-r7rs rest))
-							   (else 
-								 (loop others))))
-							(else 
-							  (loop (cdr c)))))))
+					 (cond-expand
+					   (foment
+						 (match c
+								('()
+								 (lint-r7rs rest))
+								((('else more))
+								 (lint-r7rs more)
+								 (lint-r7rs rest))
+								(((compiler-name more) others)
+								 (cond
+								   ((eq? compiler-name current-compiler)
+									(lint-r7rs more)
+									(lint-r7rs rest))
+								   (else 
+									 (loop others))))
+								(#t
+								  (loop (cdr c)))))
+					   (else
+						 (match c
+								('()
+								 (lint-r7rs rest))
+								((('else more ...))
+								 (lint-r7rs more)
+								 (lint-r7rs rest))
+								(((compiler-name more ...) others ...)
+								 (cond
+								   ((eq? compiler-name current-compiler)
+									(lint-r7rs more)
+									(lint-r7rs rest))
+								   (else 
+									 (loop others))))
+								(else 
+								  (loop (cdr c)))))))))
 	  (loop conditionnals))
 	))
 
@@ -60,15 +78,27 @@
 	(cond
 	  ((null? code) #t)
 	  ((pair? code)
-	   (match code
-			  (('define-library (library-name ...) rest ...) (on-library library-name rest))
-			  ((('export symbols ...) rest ...) (on-export symbols rest))
-			  ((('import symbols ...) rest ...) (on-import symbols rest))
-			  ((('define body ...) rest ...) (on-define body rest))
-			  ((('define-syntax body ...) rest ...) (on-define-syntax body rest))
-			  ((('cond-expand conditionnals ...) rest ...) (on-cond-expand conditionnals rest))
-			  ((head) (lint-r7rs head))
-			  ((head rest ...) (lint-r7rs head) (lint-r7rs rest))))
+	   (cond-expand
+		 (foment
+		  (match code
+				 (('define-library (library-name) rest) (on-library library-name rest))
+				 ((('export symbols) rest) (on-export symbols rest))
+				 ((('import symbols) rest) (on-import symbols rest))
+				 ((('define body) rest) (on-define body rest))
+				 ((('define-syntax body) rest) (on-define-syntax body rest))
+				 ((('cond-expand conditionnals) rest) (on-cond-expand conditionnals rest))
+				 ((head) (lint-r7rs head))
+				 ((head rest) (lint-r7rs head) (lint-r7rs rest))))
+		  (else
+			(match code
+				   (('define-library (library-name ...) rest ...) (on-library library-name rest))
+				   ((('export symbols ...) rest ...) (on-export symbols rest))
+				   ((('import symbols ...) rest ...) (on-import symbols rest))
+				   ((('define body ...) rest ...) (on-define body rest))
+				   ((('define-syntax body ...) rest ...) (on-define-syntax body rest))
+				   ((('cond-expand conditionnals ...) rest ...) (on-cond-expand conditionnals rest))
+				   ((head) (lint-r7rs head))
+				   ((head rest ...) (lint-r7rs head) (lint-r7rs rest))))))
 	  (else #t))))
 
 
@@ -85,10 +115,10 @@
 					(for-each lint-r7rs p)))))
 	  (println "----------------------------------------------------------------------\n")
 	  (println file-name "\n\n")
-	  (cond 
-		((eq? current-compiler 'guile)	
+	  (cond-expand
+		(guile
 		 (catch 'open-fail
-				(doit)
+				doit
 				(lambda (key)
 				  (println "Cannot load '" file-name "' (" key ")"))))
 		(else (doit))
@@ -103,16 +133,28 @@
 	(let ((exe-name (car args))
 		  (real_args (cdr args)))
 	  (println "exe " exe-name " real_args " real_args "\n\n\n")
-	  
-	  (match real_args
-			 (() (dohelp exe-name 0))
-			 (("-h") (dohelp exe-name 0))
-			 (("-h" _ ...) (dohelp exe-name 0))
-			 (("--help") (dohelp exe-name 0))
-			 (("--help" _ ...) (dohelp exe-name 0))
-			 (else 
-			   (for-each on-file real_args)
-			   (exit 0))))))
+
+	  (cond-expand
+		(foment
+		 (match real_args
+				 (() (dohelp exe-name 0))
+				 (("-h") (dohelp exe-name 0))
+				 (("-h" more) (dohelp exe-name 0))
+				 (("--help") (dohelp exe-name 0))
+				 (("--help" more) (dohelp exe-name 0))
+				 (#t
+				   (for-each on-file real_args)
+				   (exit 0))))
+		(else
+		  (match real_args
+				 (() (dohelp exe-name 0))
+				 (("-h") (dohelp exe-name 0))
+				 (("-h" _ ...) (dohelp exe-name 0))
+				 (("--help") (dohelp exe-name 0))
+				 (("--help" _ ...) (dohelp exe-name 0))
+				 (else 
+				   (for-each on-file real_args)
+				   (exit 0))))))))
 
 
 (if (not (eq? current-compiler 'mit))
