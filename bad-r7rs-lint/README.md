@@ -17,6 +17,17 @@ On FreeBSD, we used :
 
 For `foment`, `mit-scheme` or `gambit-scheme`, we need some work.
 
+# well...
+
+I want to write a program which can be executed by a lot of scheme compilers. But there is two big problems :
+
+ - modules,
+ - libraries like _match_.
+
+It's really difficult to make a universal module system. And _match_ has not the same syntax every where.
+
+For the moment, I'll work with _racket_ which makes debug easier.
+
 # quick notes
 
 ## environment
