@@ -3,7 +3,7 @@
 ;; ======================================================================
 
 (module tools racket
-  (provide tprintln file-loader)
+  (provide tprintln file-loader on-error)
 
   (define file-loader
     (lambda(file-name)
@@ -20,4 +20,9 @@
 
   (define (tprintln . args)
     (for-each display args))
+
+  (define (on-error . args)
+    (for-each (lambda(e) (display e (current-error-port))) (cdr args))
+    (exit (car args)))
+  
   )
