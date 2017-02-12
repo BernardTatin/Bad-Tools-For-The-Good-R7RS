@@ -7,7 +7,6 @@
 
   (define file-loader
     (lambda(file-name)
-      (tprintln "read file <" file-name ">\n")
       (with-input-from-file file-name
         (lambda()
           (letrec ((rloop (lambda(acc)
@@ -18,11 +17,15 @@
             (rloop '()))))))
   
 
-  (define (tprintln . args)
-    (for-each display args))
+  (define tprintln
+    (lambda args
+      (for-each display args)))
 
-  (define (on-error . args)
-    (for-each (lambda(e) (display e (current-error-port))) (cdr args))
-    (exit (car args)))
+  (define on-error
+    (lambda args
+      (let ((exit-code (car args))
+            (_args (cdr args)))        
+        (for-each (lambda(e) (display e (current-error-port))) _args)
+        (exit exit-code))))
   
   )
