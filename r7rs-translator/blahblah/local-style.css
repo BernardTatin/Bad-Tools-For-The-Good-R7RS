@@ -1,0 +1,15 @@
+/*
+ * personal CSS
+ */
+
+.main, .tocset {
+	font-family: Cantarell, "Luxi Sans", sans-serif;
+}
+
+.main {
+	/* font-size: 1.5em; */
+}
+
+.main p {
+	text-align: justify;
+}
