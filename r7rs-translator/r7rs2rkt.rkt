@@ -4,9 +4,22 @@
 
 (module r7rs2rkt racket
   (provide on-file)
-  (require racket/match "config.scm" "tools.rkt")
+  (require racket/match)  
+  (require "good-tools.scrbl")
+  (require "config.scm")
   
+  (define file-loader
+    (lambda(file-name)
+      (with-input-from-file file-name
+        (lambda()
+          (letrec ((rloop (lambda(acc)
+                            (let ((expression (read)))
+                              (if (eof-object? expression)
+                                  acc
+                                  (rloop (cons expression acc)))))))
+            (reverse (rloop '())))))))
   
+
 
   (define to-racket
     (lambda(program)
@@ -26,8 +39,8 @@
       
       (define print-program
         (lambda (title program)
-          (tprintln title "\n")
-          (for-each (lambda(p) (tprintln p "\n")) program)
+          (print-all title "\n")
+          (for-each (lambda(p) (print-all p "\n")) program)
           (display "\n\n\n")))
       
       (if (file-exists? file-name)
@@ -39,8 +52,8 @@
   
   (define dohelp
     (lambda(exit-code)
-      (tprintln exe-name " [-h|--help] : this text\n")
-      (tprintln exe-name " -r|--run source : execute source file\n")
+      (print-all exe-name " [-h|--help] : this text\n")
+      (print-all exe-name " -r|--run source : execute source file\n")
       (exit exit-code)))
   
   (define themain

@@ -2,14 +2,49 @@
  * personal CSS
  */
 
-.main, .tocset {
+.main, .tocsub, .tocviewtitle {
 	font-family: Cantarell, "Luxi Sans", sans-serif;
 }
 
-.main {
-	/* font-size: 1.5em; */
+.maincolumn {
+	margin-left: 18em;
+}
+
+.main h1, .main h2, .main h3, .main h4 {
+	color: #444444;
+	background-color: #eedd88;
+	padding-top: 0.2em;
+	padding-left: 0.5em;
+}
+
+.tocsub {
+	font-size: 1.1em;
+	background-color: white; /*#eedd88;*/
+}
+
+.tocviewtitle {
+	background-color: white;
+}
+.tocviewtitle tbody {
+	border: 0;
+}
+
+.tocset {
+	width: 15.5em;
+	margin-left: 1em;
+}
+
+.tocset, .tocset a, .tocset td a.tocviewselflink {
+	color: #444444;
+	background-color: white;
 }
 
 .main p {
 	text-align: justify;
+}
+
+span.stt {
+	font-size: 0.9em;
+	color: #994444;
+	font-weight: bold;
 }
