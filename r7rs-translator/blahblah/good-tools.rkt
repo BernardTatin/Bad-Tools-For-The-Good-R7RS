@@ -1,24 +1,24 @@
-#lang scribble/lp2
-@(require scribble/manual)
-@(require (for-label racket))
+#lang scribble/lp
+@(require(for-label))
 
-@title{how to make the good tools}
-@author{bernard tatin}
 
-@para[#:style "abstract"]{It's more an experimentation of literate programming than a real @emph{Howto}.
-The generated code will replace the previous @tt{tools} module.}@margin-note{humph...}
+@code{good-tools.rkt} is the source file for this document.
 
 @section{the final module}
 
 Just add a few line around all that stuff :
 
-@chunk[<module>
-       (module good-tools racket
-         (provide print-all print-errors on-error)
+@chunk[<mainchunck>
+       (require racket)
+        (provide print-all print-errors on-error)
+         
          <printall>
+         
          <printerrors>
+         
          <onerror>
-       )
+         
+         (display "good-tools : end of load\n")
        ]
 
 @section{print utilities}

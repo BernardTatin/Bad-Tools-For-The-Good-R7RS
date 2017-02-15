@@ -1,12 +1,11 @@
+;; #lang racket
 ;; ======================================================================
 ;; r7rs2rkt.rkt
 ;; ======================================================================
 
 (module r7rs2rkt racket
-  ;(provide on-file)
-  ;(require scribble/lp2)
-  (include "config.scm")
-  (include "blahblah/good-tools.scrbl")
+  (require "config.scm")
+  (require "blahblah/good-tools.rkt")
   
   (define file-loader
     (lambda(file-name)
