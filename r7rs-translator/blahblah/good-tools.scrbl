@@ -5,7 +5,8 @@
 @title{how to make the good tools}
 @author{bernard tatin}
 
-@para[#:style "abstract"]{It's more an experimentation of literate programming than a real @emph{Howto}.
-The generated code will replace the previous @tt{tools} module.}@margin-note{humph...}
+@para[#:style "abstract"]{@bold{Abstract:} It's more an experimentation of literate programming than a real @elem[#:style "plain"]{Howto}.
+This library gives some universal tools which can be expressed with a wide range of @elem[#:style "plain"]{Scheme} systems.
+}
 
 @lp-include["good-tools.rkt"]

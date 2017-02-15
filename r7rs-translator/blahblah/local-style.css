@@ -39,6 +39,10 @@
 	background-color: white;
 }
 
+.tocset table td {
+	text-align: right;
+}
+
 .main p {
 	text-align: justify;
 }
@@ -51,8 +55,13 @@ span.stt {
 
 .abstract {
 	font-style: italic;
+	font-size: 0.9em;
+	width: 80%;
+	margin: auto;
+	padding:0.3em;
+	background-color: #cccccc;
 }
-.abstract emph {
+.abstract .plain {
 	font-style: normal;
 }
 
