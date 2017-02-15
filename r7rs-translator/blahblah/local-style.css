@@ -48,3 +48,14 @@ span.stt {
 	color: #994444;
 	font-weight: bold;
 }
+
+.abstract {
+	font-style: italic;
+}
+.abstract emph {
+	font-style: normal;
+}
+
+.refcontent {
+	font-family: Cantarell, "Luxi Sans", sans-serif;
+}

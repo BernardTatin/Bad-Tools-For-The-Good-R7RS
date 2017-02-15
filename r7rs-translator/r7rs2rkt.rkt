@@ -3,10 +3,10 @@
 ;; ======================================================================
 
 (module r7rs2rkt racket
-  (provide on-file)
-  (require racket/match)  
-  (require "good-tools.scrbl")
-  (require "config.scm")
+  ;(provide on-file)
+  ;(require scribble/lp2)
+  (include "config.scm")
+  (include "blahblah/good-tools.scrbl")
   
   (define file-loader
     (lambda(file-name)

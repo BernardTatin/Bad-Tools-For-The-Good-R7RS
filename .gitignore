@@ -57,3 +57,12 @@ nbproject/
 *.bak
 .idea/
 *.komodo*
+
+# scrible
+blahblah/*.html
+sigplan*
+scribble*
+manual-*
+racket.css
+about.html
+good-tools.html
