@@ -1,1 +1,0 @@
-../bad-r7rs-lint/tools.scm
