@@ -2,6 +2,7 @@
 ;; r7rs2rkt.rkt
 ;; ======================================================================
 
+
 (module r7rs2rkt racket
   (require "config.scm")
   (require "blahblah/good-tools.rkt")
@@ -24,10 +25,9 @@
       (match program
         ('() program)
         ((list 'define-library (list library-name) rest ...)
-         (list 'module library-name 'racket (to-racket rest)))
+         (list* 'module library-name 'racket (to-racket rest)))
         ((list (list 'export exported ...) rest ...)
-         (let ((provided (cons 'provide exported)))
-           (cons provided (to-racket rest))))
+         (list* (list 'provide exported) (to-racket rest)))
         (else
          program))))
 
@@ -37,8 +37,8 @@
       
       (define print-program
         (lambda (title program)
-          (print-all title "\n")
-          (for-each (lambda(p) (print-all p "\n")) program)
+          (display title) (display "\n")
+          (for-each (lambda(p) (display p) (display "\n")) program)
           (display "\n\n\n")))
       
       (if (file-exists? file-name)
@@ -67,6 +67,6 @@
         (mloop args #t))))
 
   (if in-debug
-      (themain (list "-r" "/home/bernard/git/ChickenAndShout/hexdump/hexdump.scm"))
+      (themain (list "-r" "/home/bernard/git/ChickenAndShout/hexdump/hexdump.scm" "-r" "pipo.scm"))
       (themain (vector->list (current-command-line-arguments))))
   )
